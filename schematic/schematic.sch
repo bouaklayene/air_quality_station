@@ -912,4 +912,5 @@ Text Notes 2100 4000 0    50   ~ 0
 Alarme (SQW)
 Text Notes 2150 7200 0    50   ~ 0
 SET : On/Off Ventilateur Plantower\nPas implémenté.
+NoConn ~ 5550 2300
 $EndSCHEMATC
