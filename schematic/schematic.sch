@@ -601,7 +601,7 @@ AD1
 Text Label 1950 7050 0    50   ~ 0
 AD0
 Text Label 1950 7150 0    50   ~ 0
-AD3
+SET
 Text Label 1950 7350 0    50   ~ 0
 VDDANA
 Wire Wire Line
@@ -860,7 +860,7 @@ NoConn ~ 4100 2600
 NoConn ~ 4100 2500
 NoConn ~ 4100 2300
 Text Notes 3350 1200 0    50   ~ 0
-Nous n'utilisons que les connecteurs J1, J3.\n\nG6 : La pin SQW de la RTC est branchée sur D6 pour permettre la réception d'alarmes. \nLa pin SET est utilisée avec le Plantower PM7003 pour éteindre le ventilateur, elle est branchée sur D7. \nL'alimentation des capteurs dans l'abris météo est fournie par ce connecteur uniquement. \nG3 : Les signaux I2CSDA et I2CSCL pour les capteurs dans l'abris météo. 
+Nous n'utilisons que les connecteurs G2, G3.\n\nG2 : La pin SQW de la RTC est branchée sur D6 pour permettre la réception d'alarmes. \nL'alimentation des capteurs dans l'abris météo est fournie par le connecteur G2 uniquement. \n\nG3 : Les signaux I2CSDA et I2CSCL pour les capteurs dans l'abris météo. 
 NoConn ~ 5550 1650
 NoConn ~ 5550 1850
 NoConn ~ 5550 1950
@@ -910,6 +910,6 @@ NoConn ~ 5550 3150
 NoConn ~ 5550 3250
 Text Notes 2100 4000 0    50   ~ 0
 Alarme (SQW)
-Text Notes 2150 7150 0    50   ~ 0
-On/Off Ventilateur Plantower (SET)
+Text Notes 2150 7200 0    50   ~ 0
+SET : On/Off Ventilateur Plantower\nPas implémenté.
 $EndSCHEMATC

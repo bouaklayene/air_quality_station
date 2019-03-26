@@ -367,10 +367,6 @@ Text Label 5550 2300 2    50   ~ 0
 AD3
 Text Label 5550 2400 2    50   ~ 0
 AD4
-Text Label 5550 2950 2    50   ~ 0
-UARTRX
-Text Label 5550 3050 2    50   ~ 0
-UARTTX
 Wire Wire Line
 	4100 1650 4200 1650
 Wire Wire Line
@@ -403,7 +399,7 @@ F 3 "~" H 1650 4200 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 Text Label 1950 4000 0    50   ~ 0
-D7
+D9
 Text Label 1950 4100 0    50   ~ 0
 I2CSCL
 Text Label 1950 4200 0    50   ~ 0
@@ -605,7 +601,7 @@ AD1
 Text Label 1950 7050 0    50   ~ 0
 AD0
 Text Label 1950 7150 0    50   ~ 0
-D6
+AD3
 Text Label 1950 7350 0    50   ~ 0
 VDDANA
 Wire Wire Line
@@ -858,18 +854,13 @@ Text Notes 7800 1050 0    50   ~ 0
 Le ST Link est branché sur l'uart proposé par le connecteur Grove, ce qui le rend \ninutilisable pour contrôler nos capteurs. Nous utilisons alors l'UART sur AD0 et AD1. \nIl faut donc souder les pins TXD et RXD du capteur de particule fine sur AD1 et AD0 \n(voir connecteur J3).
 NoConn ~ 5550 1750
 NoConn ~ 5550 2400
-NoConn ~ 5550 2950
-NoConn ~ 5550 3050
-NoConn ~ 5550 3150
 NoConn ~ 4100 3150
 NoConn ~ 4100 3250
 NoConn ~ 4100 2600
 NoConn ~ 4100 2500
-NoConn ~ 4100 2400
 NoConn ~ 4100 2300
-NoConn ~ 5550 3250
 Text Notes 3350 1200 0    50   ~ 0
-Nous n'utilisons que les connecteurs J1, J3.\n\nJ1 : La pin SQW de la RTC est branchée sur D6 pour permettre la réception d'alarmes. \nLa pin SET est utilisée avec le Plantower PM7003 pour éteindre le ventilateur, elle est branchée sur D7. \nL'alimentation des capteurs dans l'abris météo est fournie par ce connecteur uniquement. \nJ3 : Les signaux I2CSDA et I2CSCL sont remontés jusqu'à l'abris météo. 
+Nous n'utilisons que les connecteurs J1, J3.\n\nG6 : La pin SQW de la RTC est branchée sur D6 pour permettre la réception d'alarmes. \nLa pin SET est utilisée avec le Plantower PM7003 pour éteindre le ventilateur, elle est branchée sur D7. \nL'alimentation des capteurs dans l'abris météo est fournie par ce connecteur uniquement. \nG3 : Les signaux I2CSDA et I2CSCL pour les capteurs dans l'abris météo. 
 NoConn ~ 5550 1650
 NoConn ~ 5550 1850
 NoConn ~ 5550 1950
@@ -905,4 +896,20 @@ Text Notes 10600 1750 0    50   ~ 0
 UART1 TX
 Text Notes 6050 1700 0    50   ~ 0
 Attention, AD1 est utilisé en UART1. \nSeulement AD2 est disponible en tant \nqu'entrée analogique sur ce connecteur.
+Text Label 5550 3050 2    50   ~ 0
+D1
+Text Label 5550 2950 2    50   ~ 0
+D0
+NoConn ~ 4100 1650
+NoConn ~ 4100 1750
+NoConn ~ 4100 1850
+NoConn ~ 4100 1950
+NoConn ~ 5550 2950
+NoConn ~ 5550 3050
+NoConn ~ 5550 3150
+NoConn ~ 5550 3250
+Text Notes 2100 4000 0    50   ~ 0
+Alarme (SQW)
+Text Notes 2150 7150 0    50   ~ 0
+On/Off Ventilateur Plantower (SET)
 $EndSCHEMATC
