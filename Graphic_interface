@@ -1,0 +1,478 @@
+# -*- coding: utf-8 -*-
+from tkinter import *
+from math import *
+#import theo
+window= Tk()
+warmuptime = 1
+s = 60  
+
+
+NB_CPT = 16
+import csv
+import os
+
+
+def S_TO_HH_MM_SS( myList ):
+   "[Total seconds,hours,minutes,seconds]"
+   myList=[s,s/3600,(s%3600)/60,(s%3600)%60]
+   return myList
+
+
+def Gen_ord( Meas_Freq,Warmup_Time,Num_Cpt,File_Path ): #appeler 1 fois/capteur , donner freq mesure, puis secondes_chauffe , numero du capteur, chemin du fichier
+	"generate 24h of execution for one sensor"
+	f = open(File_Path, 'a')
+	i=0
+	while i<86400:
+		i=i+Meas_Freq
+		if Warmup_Time >0:
+			ligne=str(i-Warmup_Time)+","
+			for x in range(0,Num_Cpt-1):
+				ligne = ligne +"0,"
+			ligne = ligne + "1,"
+			for x in range(Num_Cpt,NB_CPT-1):
+				ligne = ligne +"0,"
+			if Num_Cpt<NB_CPT:
+				ligne = ligne +"0"
+			ligne = ligne +"\n"
+			f.write(ligne)
+
+
+		ligne=str(i)+","
+		for x in range(0,Num_Cpt-1):
+			ligne = ligne +"0,"
+		ligne = ligne + "1,"
+		for x in range(Num_Cpt,NB_CPT-1):
+			ligne = ligne +"0,"
+		if Num_Cpt<NB_CPT:
+			ligne = ligne +"0"
+		ligne = ligne +"\n"
+		f.write(ligne)
+	f.close()
+	return 
+
+######################################################
+def Tri_ord( File_Path_in, File_Path_out_h, File_Path_out_cpp ):
+	"Sort all line and merge when same time and generate measure_config.h file"
+	with open(File_Path_in, 'r') as p:
+	        #reads csv into a list of lists
+            data = [list(map(int,rec)) for rec in csv.reader(p, delimiter=',')]    
+            data.sort();
+            databis = [data[0]]
+            for x in range(1,len(data)):
+                if data[x][0] == databis[len(databis)-1][0]:
+                    for y in range(1,len(data[x])):
+                        databis[len(databis)-1][y]=max(data[x][y], databis[len(databis)-1][y])
+                else:
+                    databis.append(data[x])
+            with open(File_Path_out_h ,'w') as fi:
+                writer=csv.writer(fi, lineterminator='\n')
+                fi.write("#ifndef __ORDONNANCEMENT_H__\n#define __ORDONNANCEMENT_H__\n\n\nextern int ordo["+str(len(databis)*len(databis[0]))+"];")
+                fi.write("\n#endif")
+            with open(File_Path_out_cpp ,'w') as fi_cpp:
+                writer=csv.writer(fi_cpp, lineterminator='\n')
+                fi_cpp.write("#include \"ordonnancement.h\"\n\nextern int ordo["+str(len(databis)*len(databis[0]))+"]={")
+                for tup in databis:
+                          writer.writerow(tup)
+                          fi_cpp.write(",")
+                fi_cpp.write("};\n")
+                fi_cpp.seek(fi_cpp.tell() - 1, os.SEEK_SET)
+                fi_cpp.write('')
+                
+
+
+#tempFile=deleteContent("C:/Users/USER/Desktop/qualite de l air/nadi/interface graphique/new_new.txt")
+#os.remove("C:/Users/USER/Desktop/qualite de l air/nadi/interface graphique/new.txt")
+######################################################
+r_ino=put =input("Press enter to enter...")
+print (r_ino)
+####################################################################################################
+
+File_Path = "C:/Users/USER/Desktop/qualite de l air/nadi/interface graphique/new.txt"
+def var_states():
+#   print("temps de mesure : %s" % (e20.get())) 
+#   
+#   print (a)
+#   Meas_Freq = int(e00.get())
+#   Warmup_Time = int(e01.get())
+#   Num_Cpt = 1 
+#   File_Path = "C:\\Users\\USER\\Desktop\\qualite de l air\\nadi\\interface graphique"
+#   Gen_ord( Meas_Freq,Warmup_Time,Num_Cpt,File_Path )
+   if (var00.get()==1): 
+       MeasFreq0 =int(e00.get())
+       if ((var01.get()==1)):
+           WarmupTime0 = int(e01.get())
+       else:
+           WarmupTime0 = 0
+       Num_Cpt0 = 1
+       Gen_ord( MeasFreq0,WarmupTime0,1,File_Path )
+       #print (MeasFreq0, WarmupTime0, Num_Cpt0)
+   
+       
+   if (var10.get()==1): 
+       MeasFreq1 =int(e10.get())
+       if ((var11.get()==1)):
+           WarmupTime1 = int(e11.get())
+       else:
+           WarmupTime1 = 0
+       Num_Cpt = 2
+       Gen_ord( MeasFreq1,WarmupTime1,2,File_Path )
+       #print (MeasFreq, WarmupTime, Num_Cpt)
+       
+   if (var20.get()==1): 
+       MeasFreq =int(e20.get())
+       if ((var21.get()==1)):
+           WarmupTime = int(e21.get())
+       else:
+           WarmupTime = 0
+       Num_Cpt = 3
+       Gen_ord( MeasFreq,WarmupTime,3,File_Path )
+        #print (MeasFreq, WarmupTime, Num_Cpt)
+       
+   if (var30.get()==1):
+       MeasFreq = int(e30.get())
+       if ((var31.get()==1)):
+           WarmupTime = int(e31.get())
+       else:
+           WarmupTime = 0
+       Num_Cpt = 4
+       Gen_ord( MeasFreq,WarmupTime,4,File_Path )
+        #print (MeasFreq, WarmupTime, Num_Cpt)
+       
+   if (var40.get()==1):
+       MeasFreq = int(e40.get())
+       if ((var41.get()==1)):
+           WarmupTime = int(e41.get())
+       else:
+           WarmupTime = 0
+       Num_Cpt = 5
+       Gen_ord( MeasFreq,WarmupTime,5,File_Path )
+       # print (MeasFreq, WarmupTime, Num_Cpt)
+       
+   if (var50.get()==1):
+       MeasFreq = int(e50.get())
+       if ((var51.get()==1)):
+           WarmupTime = int(e51.get())
+       else:
+           WarmupTime = 0
+       Num_Cpt = 6
+       Gen_ord( MeasFreq,WarmupTime,6,File_Path )
+        #print (MeasFreq, WarmupTime, Num_Cpt)
+       
+   if (var60.get()==1):
+       MeasFreq = int(e60.get())
+       if ((var61.get()==1)):
+           WarmupTime = int(e61.get())
+       else:
+           WarmupTime = 0
+       Num_Cpt = 7
+       Gen_ord( MeasFreq,WarmupTime,7,File_Path )
+        #print (MeasFreq, WarmupTime, Num_Cpt)
+       
+   if (var70.get()==1):
+       MeasFreq = int(e70.get())
+       if ((var71.get()==1)):
+           WarmupTime = int(e71.get())
+       else:
+           WarmupTime = 0
+       Num_Cpt = 8
+       Gen_ord( MeasFreq,WarmupTime,8,File_Path )
+       # print (MeasFreq, WarmupTime, Num_Cpt)
+       
+   if (var80.get()==1):
+       MeasFreq = int(e80.get())
+       if ((var81.get()==1)):
+           WarmupTime = int(e81.get())
+       else:
+           WarmupTime = 0
+       Num_Cpt = 9
+       Gen_ord( MeasFreq,WarmupTime,9,File_Path )
+        #print (MeasFreq, WarmupTime, Num_Cpt)
+       
+   if (var90.get()==1):
+       MeasFreq = int(e90.get())
+       if ((var91.get()==1)):
+           WarmupTime = int(e91.get())
+       else:
+           WarmupTime = 0
+       Num_Cpt = 10
+       Gen_ord( MeasFreq,WarmupTime,10,File_Path )
+        #print (MeasFreq, WarmupTime, Num_Cpt)
+       
+   if (var100.get()==1):
+       MeasFreq = int(e100.get())
+       if ((var101.get()==1)):
+           WarmupTime = int(e101.get())
+       else:
+           WarmupTime = 0
+       Num_Cpt = 11
+       Gen_ord( MeasFreq,WarmupTime,11,File_Path )
+       # print (MeasFreq, WarmupTime, Num_Cpt)
+   File_Path_in =File_Path
+   File_Path_out = "C:/Users/USER/Desktop/qualite de l air/nadi/interface graphique/ordonnancement.h"
+   File_Path_out_cpp = "C:/Users/USER/Desktop/qualite de l air/nadi/interface graphique/ordonnancement.cpp"
+   Tri_ord( File_Path_in, File_Path_out, File_Path_out_cpp)
+   os.remove(File_Path_in)
+   #tempFile=deleteContent(File_Path_in)
+   delete_e()
+
+def delete_e():
+   e00.delete(0,END)
+   e01.delete(0,END)
+   e20.delete(0,END)
+   e21.delete(0,END)
+   e30.delete(0,END)
+   e31.delete(0,END)
+   e40.delete(0,END)
+   e41.delete(0,END)
+   e50.delete(0,END)
+   e51.delete(0,END)
+   e60.delete(0,END)
+   e61.delete(0,END)
+   e70.delete(0,END)
+   e71.delete(0,END)
+   e80.delete(0,END)
+   e81.delete(0,END)
+   e90.delete(0,END)
+   e91.delete(0,END)
+   e100.delete(0,END)
+   e101.delete(0,END)
+   e10.delete(0,END)
+   e11.delete(0,END)
+    
+
+           
+
+#Ouverture Fenetre
+   
+   
+window.title("Qualité de l'air - Grenoble")
+window.geometry('750x330')
+
+#init variables capteurs
+var00 = IntVar()
+var01 = IntVar()
+var10 = IntVar()
+var11 = IntVar()
+var20 = IntVar()
+var21 = IntVar()
+var30 = IntVar()
+var31 = IntVar()
+var40 = IntVar()
+var41 = IntVar()
+var50 = IntVar()
+var51 = IntVar()
+var60 = IntVar()
+var61 = IntVar()
+var70 = IntVar()
+var71 = IntVar()
+var80 = IntVar()
+var81 = IntVar()
+var90 = IntVar()
+var91 = IntVar()
+var100 = IntVar()
+var101 = IntVar()
+e00 = IntVar()
+e01 = IntVar()
+e10 = IntVar()
+e11 = IntVar()
+e20 = IntVar()
+e21 = IntVar()
+e30 = IntVar()
+e31 = IntVar()
+e40 = IntVar()
+e41 = IntVar()
+e50 = IntVar()
+e51 = IntVar()
+e60 = IntVar()
+e61 = IntVar()
+e70 = IntVar()
+e71 = IntVar()
+e80 = IntVar()
+e81 = IntVar()
+e90 = IntVar()
+e91 = IntVar()
+e100 = IntVar()
+e101 = IntVar()
+#capteurs et cases a cocher 
+#capteurs : GNSS GNSS O3 NO2 CO2 ECO2 VOC PM2.5 PM10 Pression Humidité Température
+lbl = Label(window, text="Température")
+lbl.grid(column=0, row=0)
+btn_1 = Checkbutton(window, text="Mesure", variable=var00)
+btn_1.grid(column=1, row=0)
+btn_2 = Checkbutton(window, text="Chauffe", variable=var01)
+btn_2.grid(column=2, row=0)
+l=Label(window, text="Frequence de mesure")
+l.grid(column=3, row=0)
+e00 = Entry(window)
+e00.grid(column=4, row=0)
+l=Label(window, text="Temps de chauffe")
+l.grid(column=5, row=0)
+e01 = Entry(window)
+e01.grid(column=6, row=0)
+
+
+lbl = Label(window, text="Humidité")
+lbl.grid(column=0, row=1)
+btn_1 = Checkbutton(window, text="Mesure",variable=var10)
+btn_1.grid(column=1, row=1)
+btn_2 = Checkbutton(window, text="Chauffe",variable=var11)
+btn_2.grid(column=2, row=1)
+l=Label(window, text="Frequence de mesure")
+l.grid(column=3, row=1)
+e10 = Entry(window)
+e10.grid(column=4, row=1)
+l=Label(window, text="Temps de chauffe")
+l.grid(column=5, row=1)
+e11 = Entry(window)
+e11.grid(column=6, row=1)
+
+
+lbl = Label(window, text="Pression")
+lbl.grid(column=0, row=2)
+btn_1 = Checkbutton(window, text="Mesure",variable=var20)
+btn_1.grid(column=1, row=2)
+btn_2 = Checkbutton(window, text="Chauffe",variable=var21)
+btn_2.grid(column=2, row=2)
+l=Label(window, text="Frequence de mesure")
+l.grid(column=3, row=2)
+e20 = Entry(window)
+e20.grid(column=4, row=2)
+l=Label(window, text="Temps de chauffe")
+l.grid(column=5, row=2)
+e21 = Entry(window)
+e21.grid(column=6, row=2)
+
+
+lbl = Label(window, text="PM10")
+lbl.grid(column=0, row=3)
+btn_1 = Checkbutton(window, text="Mesure",variable=var30)
+btn_1.grid(column=1, row=3)
+btn_2 = Checkbutton(window, text="Chauffe",variable=var31)
+btn_2.grid(column=2, row=3)
+l=Label(window, text="Frequence de mesure")
+l.grid(column=3, row=3)
+e30 = Entry(window)
+e30.grid(column=4, row=3)
+l=Label(window, text="Temps de chauffe")
+l.grid(column=5, row=3)
+e31 = Entry(window)
+e31.grid(column=6, row=3)
+
+
+lbl = Label(window, text="PM2.5")
+lbl.grid(column=0, row=4)
+btn_1 = Checkbutton(window, text="Mesure",variable=var40)
+btn_1.grid(column=1, row=4)
+btn_2 = Checkbutton(window, text="Chauffe",variable=var41)
+btn_2.grid(column=2, row=4)
+l=Label(window, text="Frequence de mesure")
+l.grid(column=3, row=4)
+e40 = Entry(window)
+e40.grid(column=4, row=4)
+l=Label(window, text="Temps de chauffe")
+l.grid(column=5, row=4)
+e41 = Entry(window)
+e41.grid(column=6, row=4)
+
+
+lbl = Label(window, text="VOC")
+lbl.grid(column=0, row=5)
+btn_1 = Checkbutton(window, text="Mesure",variable=var50)
+btn_1.grid(column=1, row=5)
+btn_2 = Checkbutton(window, text="Chauffe",variable=var51)
+btn_2.grid(column=2, row=5)
+l=Label(window, text="Frequence de mesure")
+l.grid(column=3, row=5)
+e50 = Entry(window)
+e50.grid(column=4, row=5)
+l=Label(window, text="Temps de chauffe")
+l.grid(column=5, row=5)
+e51 = Entry(window)
+e51.grid(column=6, row=5)
+
+
+lbl = Label(window, text="ECO2")
+lbl.grid(column=0, row=6)
+btn_1 = Checkbutton(window, text="Mesure",variable=var60)
+btn_1.grid(column=1, row=6)
+btn_2 = Checkbutton(window, text="Chauffe",variable=var61)
+btn_2.grid(column=2, row=6)
+l=Label(window, text="Frequence de mesure")
+l.grid(column=3, row=6)
+e60 = Entry(window)
+e60.grid(column=4, row=6)
+l=Label(window, text="Temps de chauffe")
+l.grid(column=5, row=6)
+e61 = Entry(window)
+e61.grid(column=6, row=6)
+
+
+lbl = Label(window, text="CO2")
+lbl.grid(column=0, row=7)
+btn_1 = Checkbutton(window, text="Mesure",variable=var70)
+btn_1.grid(column=1, row=7)
+btn_2 = Checkbutton(window, text="Chauffe",variable=var71)
+btn_2.grid(column=2, row=7)
+l=Label(window, text="Frequence de mesure")
+l.grid(column=3, row=7)
+e70 = Entry(window)
+e70.grid(column=4, row=7)
+l=Label(window, text="Temps de chauffe")
+l.grid(column=5, row=7)
+e71 = Entry(window)
+e71.grid(column=6, row=7)
+
+
+lbl = Label(window, text="NO2")
+lbl.grid(column=0, row=8)
+btn_1 = Checkbutton(window, text="Mesure",variable=var80)
+btn_1.grid(column=1, row=8)
+btn_2 = Checkbutton(window, text="Chauffe",variable=var81)
+btn_2.grid(column=2, row=8)
+l=Label(window, text="Frequence de mesure")
+l.grid(column=3, row=8)
+e80 = Entry(window)
+e80.grid(column=4, row=8)
+l=Label(window, text="Temps de chauffe")
+l.grid(column=5, row=8)
+e81 = Entry(window)
+e81.grid(column=6, row=8)
+
+
+lbl = Label(window, text="O3")
+lbl.grid(column=0, row=9)
+btn_1 = Checkbutton(window, text="Mesure",variable=var90)
+btn_1.grid(column=1, row=9)
+btn_2 = Checkbutton(window, text="Chauffe", variable=var91)
+btn_2.grid(column=2, row=9)
+l=Label(window, text="Frequence de mesure")
+l.grid(column=3, row=9)
+e90 = Entry(window)
+e90.grid(column=4, row=9)
+l=Label(window, text="Temps de chauffe")
+l.grid(column=5, row=9)
+e91 = Entry(window)
+e91.grid(column=6, row=9)
+
+
+lbl = Label(window, text="GPS")
+lbl.grid(column=0, row=10)
+btn_1 = Checkbutton(window, text="Mesure",variable=var100)
+btn_1.grid(column=1, row=10)
+btn_2 = Checkbutton(window, text="Chauffe",variable=var101)
+btn_2.grid(column=2, row=10)
+l=Label(window, text="Frequence de mesure")
+l.grid(column=3, row=10)
+e100 = Entry(window)
+e100.grid(column=4, row=10)
+l=Label(window, text="Temps de chauffe")
+l.grid(column=5, row=10)
+e101 = Entry(window)
+e101.grid(column=6, row=10)
+
+
+#bouton.pack()
+#Button(window, text='Show', command=var_states).grid(row=11, column=2)
+Button(window, text='          Entrer valeurs           ', command=var_states).grid(row=11, column=4)
+
+mainloop()
